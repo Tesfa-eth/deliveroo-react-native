@@ -28,7 +28,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView className="bg-white">
       {/* Header */}
-      <View className="flex-row pb-3 items-center space-x-2 px-4">
+      <View className="flex-row pt-6 pb-3 items-center space-x-2 px-4">
         <Image
           source={{
             uri: "https://links.papareact.com/wru",
