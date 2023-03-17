@@ -39,7 +39,7 @@ export default defineType({
       validation: (Rule) => Rule.min(1).max(5).error('Rating must be between 1 and 5'),
     },
     {
-      name: 'type',
+      name: 'category',
       title: 'Category',
       type: 'reference',
       to: [{type: 'category'}],
