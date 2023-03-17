@@ -7,7 +7,7 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   ChevronDownIcon,
@@ -17,14 +17,30 @@ import {
 } from "react-native-heroicons/outline";
 import Categories from "../components/Categories";
 import FeaturedRow from "../components/FeaturedRow";
+import client from "../sanity";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const [restaurants, setRestaurants] = useState([]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, []);
+
+  useEffect(() => {
+    client
+      .fetch(
+        `*[_type == "restaurant"]{
+        ...,
+
+      }`
+      )
+      .then((data) => setRestaurants(data))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <SafeAreaView className="bg-white">
       {/* Header */}
@@ -64,7 +80,17 @@ const HomeScreen = () => {
         <Categories />
 
         {/* Featured Row */}
-        <FeaturedRow
+        {restaurants &&
+          restaurants.map((restaurant) => (
+            <FeaturedRow
+              key={restaurant._id}
+              id={restaurant._id}
+              title={restaurant.name}
+              description={restaurant.shortdescription}
+              featuredCategory={restaurant.category.title}
+            />
+          ))}
+        {/* <FeaturedRow
           id="123"
           title="Featured Restaurants"
           description="The best restaurants in town"
@@ -81,7 +107,7 @@ const HomeScreen = () => {
           title="Offers near you"
           description="The best restaurants in town"
           featuredCategory="featured"
-        />
+        /> */}
       </ScrollView>
     </SafeAreaView>
   );
